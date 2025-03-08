@@ -1,12 +1,43 @@
-# React + Vite
+# Productos - App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CRUD de productos con React JS y Tailwind CSS
 
-Currently, two official plugins are available:
+## API
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Utiliza la API de [Dummy JSON](https://dummyjson.com) para manejar los productos.
 
-## Expanding the ESLint configuration
+## Instalacion
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Clonar el repositorio**
+
+   Abre tu terminal y clona el repositorio:
+
+   git clone https://github.com/tu-usuario/productos-app.git
+   
+2. **Instalar las dependencias**
+
+Dirígete a la carpeta del proyecto:
+
+cd productos-app
+
+2. **Instalar las dependencias**
+
+Ejecuta:
+
+npm install
+
+3. **Corre la aplicación**
+
+   npm start
+
+
+
+
+
+
+
+
+
+
+
+
