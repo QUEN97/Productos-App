@@ -4,15 +4,23 @@ import axios from 'axios';
 export const ProductContext = createContext();
 
 const ProductProvider = ({ children }) => {
-    const [products, setProducts] = useState([]);
-  
-    useEffect(() => {
-        if (products.length === 0) {
-          axios.get('https://dummyjson.com/products')
-            .then((response) => setProducts(response.data.products))
-            .catch((error) => console.error('Error al cargar productos iniciales:', error));
-        }
-      }, [products]);
+  const [products, setProducts] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!isLoaded) {
+      axios.get('https://dummyjson.com/products')
+  .then((response) => {
+    const cleanedProducts = response.data.products.map((product) => ({
+      ...product,
+      price: parseFloat(product.price) || 0,
+    }));
+    setProducts(cleanedProducts);
+  })
+  .catch((error) => console.error('Error al cargar productos iniciales:', error));
+
+    }
+  }, [isLoaded]);
 
   return (
     <ProductContext.Provider value={{ products, setProducts }}>
@@ -22,3 +30,4 @@ const ProductProvider = ({ children }) => {
 };
 
 export default ProductProvider;
+
