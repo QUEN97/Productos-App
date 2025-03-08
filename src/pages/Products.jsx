@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Modal from '../Modal'; // Asegúrate de importar el Modal
+import Modal from '../Modal'; 
 import ProductForm from './ProductForm';
 import { ProductContext } from '../context/ProductContext';
 import axios from 'axios';
@@ -8,10 +8,19 @@ import Swal from 'sweetalert2';
 const Products = () => {
     const { products, setProducts } = useContext(ProductContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null); // Para editar producto
+    const [selectedProduct, setSelectedProduct] = useState(null); //editar producto
+
+    // paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const recordsPerPage = 10;
+
+    const totalPages = Math.ceil(products.length / recordsPerPage);
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = products.slice(indexOfFirstRecord, indexOfLastRecord);
 
     useEffect(() => {
-        if (products.length === 0) { // Solo cargar productos si aún no están en el contexto
+        if (products.length === 0) { // cargar productos 
             axios.get('https://dummyjson.com/products')
                 .then((response) => setProducts(response.data.products))
                 .catch(() => Swal.fire('Error', 'No se pudieron cargar los productos', 'error'));
@@ -55,6 +64,15 @@ const Products = () => {
         setSelectedProduct(null);
     };
 
+    //botones paginacion
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     return (
         <div className="p-12">
             <div className="mb-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
@@ -71,7 +89,7 @@ const Products = () => {
                     Añadir Producto
                 </Link> */}
                 <button
-                    onClick={() => openModal()} // Abrir modal para crear producto
+                    onClick={() => openModal()} 
                     className="text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
                 >
                     Añadir Producto
@@ -91,7 +109,7 @@ const Products = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product, index) => (
+                    {currentRecords.map((product, index) => (
                             <tr
                                 key={product.id}
                                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -128,7 +146,7 @@ const Products = () => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-                {products.map((product) => (
+            {currentRecords.map((product) => (
                     <div
                         key={product.id}
                         className="bg-white dark:bg-gray-800 space-y-3 p-4 rounded-lg shadow"
@@ -149,7 +167,7 @@ const Products = () => {
                                 Editar
                             </Link> */}
                             <button
-                                onClick={() => openModal(product)} // Abrir modal para editar producto
+                                onClick={() => openModal(product)} 
                                 className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
                                 Editar
@@ -164,10 +182,29 @@ const Products = () => {
                     </div>
                 ))}
             </div>
+
+            {/* botones paginacin */}
+            <div className="flex justify-between items-center mt-6">
+                <button
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                    className="text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
+                >
+                    Anterior
+                </button>
+                <span className="text-gray-700">Página {currentPage} de {totalPages}</span>
+                <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    className="text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
+                >
+                    Siguiente
+                </button>
+            </div>
             {/* Modal */}
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <ProductForm
-                    product={selectedProduct} // null para crear, datos para editar
+                    product={selectedProduct} 
                     onClose={closeModal}
                     setProducts={setProducts}
                 />
