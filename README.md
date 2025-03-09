@@ -30,7 +30,9 @@ npm install
 
    npm start
 
-
+**Credenciales de acceso**
+Usuario: emilys
+Contraseña: emilyspass
 
 
 
