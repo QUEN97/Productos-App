@@ -28,21 +28,24 @@ const Products = () => {
     }, [products, setProducts]);
 
     const deleteProduct = (id) => {
-        const isLocalProduct = typeof id === 'string' && id.startsWith('b');
-
-        if (isLocalProduct) {
-            setProducts((prev) => prev.filter((product) => product.id !== id));
-            Swal.fire('Eliminado', 'Producto eliminado localmente', 'success');
-        } else {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: '¡Esto no se podrá deshacer!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar',
-            }).then((result) => {
-                if (result.isConfirmed) {
+        // Mostrar ventana de confirmación para cualquier tipo de producto
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¡Esto no se podrá deshacer!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const isLocalProduct = typeof id === 'string'; // Verifica si es un producto local
+    
+                if (isLocalProduct) {
+                    // Eliminar producto localmente
+                    setProducts((prev) => prev.filter((product) => product.id !== id));
+                    Swal.fire('Eliminado', 'Producto eliminado localmente', 'success');
+                } else {
+                    // Eliminar producto de la API
                     axios.delete(`https://dummyjson.com/products/${id}`)
                         .then(() => {
                             setProducts((prev) => prev.filter((product) => product.id !== id));
@@ -50,9 +53,10 @@ const Products = () => {
                         })
                         .catch(() => Swal.fire('Error', 'No se pudo eliminar el producto', 'error'));
                 }
-            });
-        }
+            }
+        });
     };
+    
 
     const openModal = (product = null) => {
         setSelectedProduct(product); // Si hay producto, significa que es para edición
