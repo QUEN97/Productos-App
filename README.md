@@ -34,7 +34,13 @@ npm install
 Usuario: emilys
 Contraseña: emilyspass
 
-
+![Pantalla Login](./capturas/productos-app-login.png)
+![Pantalla CRUD](./capturas/productos-app-crud.png)
+![Pantalla Agregar](./capturas/productos-app-agregar.png)
+![Pantalla Alert](./capturas/productos-app-alert-success.png)
+![Pantalla Ver/Editar](./capturas/productos-app-ver-editar.png)
+![Pantalla Alert 2](./capturas/productos-app-alert-confirmacion-eliminar.png)
+![Pantalla Responsive](./capturas/productos-app-responsive.png)
 
 
 
