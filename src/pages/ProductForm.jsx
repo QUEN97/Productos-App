@@ -5,17 +5,25 @@ import Swal from 'sweetalert2';
 const ProductForm = ({ product, onClose, setProducts }) => {
   const [title, setTitle] = useState('');
   const [price, setPrice] =useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [stock, setStock] = useState('');
 
   // Cargar datos del producto si se está editando
   useEffect(() => {
-    //console.log('producto recibido:', product);
     if (product) {
-      setTitle(product.title);
-      setPrice(product.price);
+      setTitle(product.title || '');
+      setPrice(product.price || '');
+      setDescription(product.description || '');
+      setCategory(product.category || '');
+      setStock(product.stock || ''); 
     } else {
-      // Resetear los campos si es para creación
+      // Resetear campos para creación
       setTitle('');
       setPrice('');
+      setDescription('');
+      setCategory('');
+      setStock('');
     }
   }, [product]);
 
@@ -25,6 +33,9 @@ const ProductForm = ({ product, onClose, setProducts }) => {
     const newProduct = {
       title,
       price: parseFloat(price),
+      description,
+      category,
+      stock: parseInt(stock, 10),
     };
 
     try {
@@ -70,53 +81,74 @@ const ProductForm = ({ product, onClose, setProducts }) => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      {/* Envabezado */}
-      <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
+    <div className="p-8 bg-white rounded-lg shadow-lg max-w-full md:max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-800 text-center mb-8">
         {product ? 'Editar Producto' : 'Crear Producto'}
       </h1>
-
-      {/* Formulario */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Título del Producto */}
-        <div>
-          <label className="block text-gray-600 font-medium mb-2" htmlFor="title">
-            Título del Producto
-          </label>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+        <div className="md:col-span-2">
+          <label className="block text-gray-600 font-medium mb-2">Título</label>
           <input
             type="text"
-            id="title"
-            placeholder="Ingrese el título del producto"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
           />
         </div>
 
-        {/* Precio */}
+        
+        <div className="md:col-span-2">
+          <label className="block text-gray-600 font-medium mb-2">Descripción</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows="4"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+          ></textarea>
+        </div>
+
         <div>
-          <label className="block text-gray-600 font-medium mb-2" htmlFor="price">
-            Precio
-          </label>
+          <label className="block text-gray-600 font-medium mb-2">Precio</label>
           <input
             type="number"
-            id="price"
-            placeholder="Ingrese el precio"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
           />
         </div>
+        <div>
+          <label className="block text-gray-600 font-medium mb-2">Categoría</label>
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-gray-600 font-medium mb-2">Stock</label>
+          <input
+            type="number"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+          />
+        </div>
+        
 
-        {/* Guardar */}
-        <button
-          type="submit"
-          className="w-full bg-[#24292F] hover:bg-[#24292F]/90 text-white font-medium py-2 rounded-lg transition duration-200"
-        >
-          {product ? 'Actualizar Producto' : 'Guardar Producto'}
-        </button>
+        
+        <div className="md:col-span-2 flex justify-end">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded-lg"
+          >
+            Guardar
+          </button>
+        </div>
       </form>
     </div>
   );
